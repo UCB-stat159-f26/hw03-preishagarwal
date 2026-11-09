@@ -1,0 +1,7 @@
+Metadata-Version: 2.4
+Name: tennisage
+Version: 0.1.0
+Summary: Fetch Tennis Abstract career matches and plot player vs opponent age
+Requires-Python: >=3.9
+Requires-Dist: pandas
+Requires-Dist: matplotlib
