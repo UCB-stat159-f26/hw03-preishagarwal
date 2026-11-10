@@ -1,8 +1,6 @@
 """Private helpers for turning Tennis Abstract career JS files into rows."""
 
 import json
-from tennisage._parse import _extract_matches, _format_player_name
-from tests.mock_data import FEMALE_JS, MALE_JS
 
 OPP_AGE_FIELD = 16  # opponent birthdate (women's files) or age (men's files)
 
@@ -40,3 +38,8 @@ def test_extract_male_rows():
 def test_extract_rejects_text_without_array():
     with pytest.raises(ValueError):
         _extract_matches("var nothing = 0;")
+
+def _is_male_file(rows):
+    """Men's files store opponent age as a decimal; women's store a birthdate."""
+    return any("." in row[OPP_AGE_FIELD] for row in rows)
+
