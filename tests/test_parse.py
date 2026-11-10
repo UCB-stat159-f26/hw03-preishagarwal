@@ -1,8 +1,9 @@
+import pandas as pd
 import pytest
 
-from tennisage._parse import _extract_matches, _format_player_name, _is_male_file
+from tennisage._parse import (_extract_birthdate, _extract_matches,
+                              _format_player_name, _is_male_file)
 from tests.mock_data import FEMALE_JS, MALE_JS
-
 
 @pytest.mark.parametrize("name", ["serena williams", "Serena Williams",
                                   "SerenaWilliams", "  serena   williams "])
@@ -46,3 +47,12 @@ def test_female_row_with_stats_is_not_male():
     row = _extract_matches(FEMALE_JS)[0]
     long_row = row[:20] + ["10"] * 19 + [""] * 4 + [row[-1]]  # 44 fields
     assert not _is_male_file([long_row])
+
+def test_extract_birthdate():
+    page = "<script>\nvar dob = 19860603;\nfunction calculateAge(dobString) {"
+    assert _extract_birthdate(page) == pd.Timestamp("1986-06-03")
+
+
+def test_extract_birthdate_missing():
+    with pytest.raises(ValueError):
+        _extract_birthdate("<html>no birthday here</html>")
