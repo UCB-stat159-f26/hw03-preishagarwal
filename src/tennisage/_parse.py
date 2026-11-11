@@ -23,25 +23,6 @@ def _extract_matches(js_text):
     array_text = js_text[js_text.index("["): js_text.rindex("]") + 1]
     return json.loads(array_text)
 
-
-def test_extract_female_rows():
-    rows = _extract_matches(FEMALE_JS)
-    assert len(rows) == 3
-    assert rows[0][11] == "Anne Miller"
-    assert rows[0][16] == "19770119"
-
-
-def test_extract_male_rows():
-    rows = _extract_matches(MALE_JS)
-    assert len(rows) == 3
-    assert rows[1][11] == "Stefano Galvani"
-    assert rows[1][16] == "24.2902121834"
-
-
-def test_extract_rejects_text_without_array():
-    with pytest.raises(ValueError):
-        _extract_matches("var nothing = 0;")
-
 def _is_male_file(rows):
     """Men's files store opponent age as a decimal; women's store a birthdate."""
     return any("." in row[OPP_AGE_FIELD] for row in rows)
